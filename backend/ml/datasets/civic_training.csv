@@ -1,0 +1,14 @@
+text,category
+large pothole in road,POTHOLE
+road crater damages vehicle,POTHOLE
+street light is dark,STREETLIGHT
+lamp not working at night,STREETLIGHT
+water pipe is leaking,WATER
+broken water supply line,WATER
+drain is overflowing,DRAINAGE
+blocked drain after rain,DRAINAGE
+garbage not collected,GARBAGE
+waste pile on street,GARBAGE
+road surface damaged,ROAD
+electric pole cable fault,ELECTRICITY
+other civic issue,OTHER
