@@ -946,30 +946,6 @@ export function CiviFixDashboard() {
             </form>
           )}
         </div>
-        <div style={{ marginTop: 14, textAlign: 'center', fontSize: 11, color: '#88989d' }}>
-          <span>CiviFix Smart City Platform</span>
-          <span style={{ margin: '0 8px', color: '#cad6d4' }}>•</span>
-          <button
-            type="button"
-            onClick={() => {
-              setSupportSubmitted(false)
-              setShowSupportModal(true)
-            }}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#176b67',
-              fontWeight: 700,
-              cursor: 'pointer',
-              textDecoration: 'underline',
-              padding: 0,
-              fontSize: 11,
-            }}
-          >
-            Contact Support & Author
-          </button>
-        </div>
-        {renderSupportModal()}
       </main>
     )
   }
@@ -1097,6 +1073,34 @@ export function CiviFixDashboard() {
                 <span>Scikit-Learn ML Ready</span>
               </div>
             </div>
+
+            {/* Contact Support & Author Query Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setSupportSubmitted(false)
+                setShowSupportModal(true)
+              }}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '8px 10px',
+                marginBottom: 8,
+                background: '#f0f5f4',
+                border: '1px solid #d4e4e0',
+                borderRadius: 8,
+                color: '#176b67',
+                fontSize: 11,
+                fontWeight: 650,
+                cursor: 'pointer',
+                textAlign: 'left',
+              }}
+            >
+              <HelpCircle size={15} />
+              <span style={{ flex: 1 }}>Contact Support & License</span>
+            </button>
 
             <div className="profile-row">
               <div className="profile-avatar">
