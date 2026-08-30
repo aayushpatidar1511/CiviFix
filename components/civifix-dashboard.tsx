@@ -175,6 +175,17 @@ export function CiviFixDashboard() {
   // Infrastructure AI Risk Modal
   const [riskModalData, setRiskModalData] = useState<{ assetName: string; risk: number; health: number; reasons: string[] } | null>(null)
 
+  // Project Support & Contact Modal State
+  const [showSupportModal, setShowSupportModal] = useState(false)
+  const [supportForm, setSupportForm] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    topic: 'Project Architecture & Tech Stack',
+    message: '',
+  })
+  const [supportSubmitted, setSupportSubmitted] = useState(false)
+
   // Report Issue Form State
   const [reportForm, setReportForm] = useState({
     title: '',
@@ -587,6 +598,153 @@ export function CiviFixDashboard() {
   // Unread notification count
   const unreadCount = useMemo(() => notifications.filter((n) => !n.read).length, [notifications])
 
+  function renderSupportModal() {
+    if (!showSupportModal) return null
+    return (
+      <div className="modal-backdrop" style={{ zIndex: 9999 }}>
+        <div className="report-modal" style={{ maxWidth: 520, width: '92%' }}>
+          <div className="modal-header">
+            <div>
+              <div className="panel-kicker" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                <HelpCircle size={14} /> Project Support & Inquiries
+              </div>
+              <h2 style={{ margin: '2px 0 0', fontSize: 20 }}>Contact Project Support</h2>
+            </div>
+            <button className="icon-button" type="button" onClick={() => setShowSupportModal(false)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          <div style={{ background: '#f2f8f7', border: '1px solid #c9e4de', borderRadius: 8, padding: '10px 14px', marginBottom: 16, fontSize: 12, color: '#176b67' }}>
+            <strong>Have questions or recruitment inquiries?</strong>
+            <div style={{ fontSize: 11, color: '#3d5c56', marginTop: 2 }}>
+              Reach out directly regarding architecture, tech stack, or hiring opportunities. Direct email: <strong>aayushmahendrapatidar@gmail.com</strong>
+            </div>
+          </div>
+
+          {supportSubmitted ? (
+            <div style={{ padding: '24px 16px', textAlign: 'center' }}>
+              <div style={{ width: 46, height: 46, borderRadius: '50%', background: '#e0f4ee', color: '#176b67', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                <CheckCircle2 size={24} />
+              </div>
+              <h3 style={{ margin: '0 0 6px', fontSize: 16, color: '#27383e' }}>Query Prepared & Dispatched!</h3>
+              <p style={{ margin: '0 0 16px', fontSize: 12, color: '#6d7f85', lineHeight: 1.5 }}>
+                Thank you, <strong>{supportForm.name}</strong>! Your inquiry regarding <em>{supportForm.topic}</em> has been opened in your email client addressed to <strong>aayushmahendrapatidar@gmail.com</strong>.
+              </p>
+              <button
+                type="button"
+                className="primary-button"
+                style={{ margin: '0 auto' }}
+                onClick={() => {
+                  setShowSupportModal(false)
+                  setSupportSubmitted(false)
+                }}
+              >
+                Close Support Box
+              </button>
+            </div>
+          ) : (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                const subject = encodeURIComponent(`[CiviFix Inquiry] ${supportForm.topic} - ${supportForm.name}`)
+                const body = encodeURIComponent(
+                  `Hello Aayush,\n\nI have an inquiry regarding the CiviFix platform.\n\n` +
+                  `• Name: ${supportForm.name}\n` +
+                  `• Phone Number: ${supportForm.phone}\n` +
+                  `• Email: ${supportForm.email}\n` +
+                  `• Topic: ${supportForm.topic}\n\n` +
+                  `Message / Question:\n${supportForm.message}\n\n` +
+                  `Sent from CiviFix Contact Support Portal`
+                )
+                window.open(`mailto:aayushmahendrapatidar@gmail.com?subject=${subject}&body=${body}`, '_blank')
+                setSupportSubmitted(true)
+              }}
+            >
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <label>
+                  Your Name *
+                  <input
+                    required
+                    value={supportForm.name}
+                    onChange={(e) => setSupportForm({ ...supportForm, name: e.target.value })}
+                    placeholder="Enter your name"
+                  />
+                </label>
+                <label>
+                  Phone Number *
+                  <input
+                    required
+                    value={supportForm.phone}
+                    onChange={(e) => setSupportForm({ ...supportForm, phone: e.target.value })}
+                    placeholder="+91 98765 43210"
+                  />
+                </label>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <label>
+                  Your Email Address *
+                  <input
+                    required
+                    type="email"
+                    value={supportForm.email}
+                    onChange={(e) => setSupportForm({ ...supportForm, email: e.target.value })}
+                    placeholder="you@example.com"
+                  />
+                </label>
+                <label>
+                  Inquiry Topic *
+                  <select
+                    value={supportForm.topic}
+                    onChange={(e) => setSupportForm({ ...supportForm, topic: e.target.value })}
+                  >
+                    <option value="Project Architecture & Tech Stack">Architecture & Tech Query</option>
+                    <option value="Recruitment & Hiring Opportunity">Recruitment & Hiring</option>
+                    <option value="Platform Feedback & Suggestions">Platform Feedback</option>
+                    <option value="General Question">General Question</option>
+                  </select>
+                </label>
+              </div>
+
+              <label>
+                Your Question / Message *
+                <textarea
+                  required
+                  rows={4}
+                  value={supportForm.message}
+                  onChange={(e) => setSupportForm({ ...supportForm, message: e.target.value })}
+                  placeholder="Type your question or inquiry here..."
+                  style={{ width: '100%', resize: 'vertical' }}
+                />
+              </label>
+
+              <div className="modal-actions" style={{ marginTop: 14 }}>
+                <button type="button" className="soft-button" onClick={() => setShowSupportModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="primary-button">
+                  <Send size={15} /> Send Query to Author
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* OFFICIAL COPYRIGHT & LICENSE TAG */}
+          <div style={{ marginTop: 18, paddingTop: 14, borderTop: '1px solid #e7eeec', fontSize: 11, color: '#7a8a90', textAlign: 'center', lineHeight: 1.5 }}>
+            <div style={{ fontWeight: 650, color: '#27383e' }}>CiviFix — Smart City Operations Platform</div>
+            <div style={{ marginTop: 2 }}>
+              © 2026 Aayush Patidar. All rights reserved. • Released under the <strong>MIT License</strong>
+            </div>
+            <div style={{ marginTop: 2, fontSize: 10, color: '#97a6ab' }}>
+              Official Author Email: <a href="mailto:aayushmahendrapatidar@gmail.com" style={{ color: '#176b67', fontWeight: 600, textDecoration: 'none' }}>aayushmahendrapatidar@gmail.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // If not logged in, render sleek Auth View
   if (!isAuth) {
     return (
@@ -789,16 +947,29 @@ export function CiviFixDashboard() {
           )}
         </div>
         <div style={{ marginTop: 14, textAlign: 'center', fontSize: 11, color: '#88989d' }}>
-          CiviFix Smart City Platform • Developed by{' '}
-          <a
-            href="https://github.com/aayushpatidar1511"
-            target="_blank"
-            rel="noreferrer"
-            style={{ color: '#176b67', fontWeight: 600, textDecoration: 'none' }}
+          <span>CiviFix Smart City Platform</span>
+          <span style={{ margin: '0 8px', color: '#cad6d4' }}>•</span>
+          <button
+            type="button"
+            onClick={() => {
+              setSupportSubmitted(false)
+              setShowSupportModal(true)
+            }}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#176b67',
+              fontWeight: 700,
+              cursor: 'pointer',
+              textDecoration: 'underline',
+              padding: 0,
+              fontSize: 11,
+            }}
           >
-            Aayush Patidar
-          </a>
+            Contact Support & Author
+          </button>
         </div>
+        {renderSupportModal()}
       </main>
     )
   }
@@ -981,6 +1152,27 @@ export function CiviFixDashboard() {
                 }}
               >
                 <Mail size={17} />
+              </button>
+              <button
+                className="icon-button"
+                onClick={() => {
+                  setSupportSubmitted(false)
+                  setShowSupportModal(true)
+                }}
+                title="Project Support & Contact Author"
+                style={{
+                  background: '#f0f5f4',
+                  border: '1px solid #d0e0dc',
+                  color: '#176b67',
+                  borderRadius: 8,
+                  width: 36,
+                  height: 36,
+                  display: 'grid',
+                  placeItems: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                <HelpCircle size={17} />
               </button>
               <button
                 className="notification-button"
@@ -2505,6 +2697,9 @@ export function CiviFixDashboard() {
             </div>
           </div>
         )}
+
+        {/* PROJECT SUPPORT & INQUIRY MODAL */}
+        {renderSupportModal()}
       </main>
     </div>
   )
