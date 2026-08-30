@@ -16,6 +16,7 @@ node_modules
 out/
 build/
 dist/
+*.tsbuildinfo
 
 # Python & Django
 __pycache__/
@@ -28,6 +29,7 @@ backend/media/
 venv/
 .venv/
 env/
+*celerybeat-schedule*
 
 # OS
 .DS_Store

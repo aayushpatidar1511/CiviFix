@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' && window.location.hostname === 'localhost' ? 'http://localhost:8000/api/v1' : 'https://civifix-api.onrender.com/api/v1')
 const API_ROOT = API_URL.replace(/\/api\/v1$/, '')
 
 export type User = {

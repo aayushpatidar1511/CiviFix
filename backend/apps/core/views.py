@@ -15,6 +15,7 @@ from .services.logic import *
 from .services.email_service import notify_complaint_registered, notify_status_update, notify_worker_assigned
 
 def health(request): return JsonResponse({'status':'ok','service':'civifix-api','time':timezone.now().isoformat()})
+def root_api(request): return JsonResponse({'service': 'CiviFix Smart City API', 'status': 'online', 'version': '1.0.0', 'docs': '/api/docs/', 'health': '/health/', 'admin': '/admin/'})
 
 @api_view(['POST'])
 @permission_classes([AllowAny])

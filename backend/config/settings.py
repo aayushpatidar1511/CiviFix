@@ -3,12 +3,27 @@ from pathlib import Path
 BASE_DIR=Path(__file__).resolve().parent.parent
 SECRET_KEY=os.getenv('DJANGO_SECRET_KEY','dev-change-me'); DEBUG=os.getenv('DJANGO_DEBUG','true').lower()=='true'; ALLOWED_HOSTS=os.getenv('DJANGO_ALLOWED_HOSTS','*').split(',')
 INSTALLED_APPS=['django.contrib.admin','django.contrib.auth','django.contrib.contenttypes','django.contrib.sessions','django.contrib.messages','django.contrib.staticfiles','django.contrib.gis','corsheaders','rest_framework','rest_framework_simplejwt','drf_spectacular','apps.core']
-MIDDLEWARE=['corsheaders.middleware.CorsMiddleware','django.middleware.security.SecurityMiddleware','django.contrib.sessions.middleware.SessionMiddleware','django.middleware.common.CommonMiddleware','django.middleware.csrf.CsrfViewMiddleware','django.contrib.auth.middleware.AuthenticationMiddleware','django.contrib.messages.middleware.MessageMiddleware']
+MIDDLEWARE=['corsheaders.middleware.CorsMiddleware','django.middleware.security.SecurityMiddleware','whitenoise.middleware.WhiteNoiseMiddleware','django.contrib.sessions.middleware.SessionMiddleware','django.middleware.common.CommonMiddleware','django.middleware.csrf.CsrfViewMiddleware','django.contrib.auth.middleware.AuthenticationMiddleware','django.contrib.messages.middleware.MessageMiddleware']
 ROOT_URLCONF='config.urls'; WSGI_APPLICATION='config.wsgi.application'; AUTH_USER_MODEL='core.User'
 TEMPLATES=[{'BACKEND':'django.template.backends.django.DjangoTemplates','DIRS':[],'APP_DIRS':True,'OPTIONS':{'context_processors':['django.template.context_processors.request','django.contrib.auth.context_processors.auth','django.contrib.messages.context_processors.messages']}}]
-DATABASES={'default':{'ENGINE':os.getenv('DB_ENGINE','django.contrib.gis.db.backends.postgis'),'NAME':os.getenv('POSTGRES_DB','civifix'),'USER':os.getenv('POSTGRES_USER','civifix'),'PASSWORD':os.getenv('POSTGRES_PASSWORD','civifix'),'HOST':os.getenv('POSTGRES_HOST','localhost'),'PORT':os.getenv('POSTGRES_PORT','5432')}}
-LANGUAGE_CODE='en-us'; TIME_ZONE='UTC'; USE_I18N=True; USE_TZ=True; STATIC_URL='/static/'; MEDIA_URL='/media/'; MEDIA_ROOT=BASE_DIR/'media'; DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
-CORS_ALLOWED_ORIGINS=[x for x in os.getenv('CORS_ALLOWED_ORIGINS','http://localhost:3000').split(',') if x]; REST_FRAMEWORK={'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework_simplejwt.authentication.JWTAuthentication'],'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAuthenticated'],'DEFAULT_SCHEMA_CLASS':'drf_spectacular.openapi.AutoSchema'}
+import urllib.parse
+_db_url = os.getenv('DATABASE_URL')
+if _db_url:
+    try:
+        _proto, _rest = _db_url.split('://', 1)
+        _auth, _hostpart = _rest.rsplit('@', 1)
+        _user, _pass = _auth.split(':', 1) if ':' in _auth else (_auth, '')
+        _host_port, _db = _hostpart.split('/', 1) if '/' in _hostpart else (_hostpart, 'postgres')
+        _host, _port = _host_port.split(':', 1) if ':' in _host_port else (_host_port, '5432')
+        DATABASES = {'default': {'ENGINE': os.getenv('DB_ENGINE', 'django.contrib.gis.db.backends.postgis'), 'NAME': _db.split('?')[0], 'USER': urllib.parse.unquote(_user), 'PASSWORD': urllib.parse.unquote(_pass), 'HOST': _host, 'PORT': str(_port)}}
+    except Exception:
+        _u = urllib.parse.urlparse(_db_url)
+        DATABASES = {'default': {'ENGINE': os.getenv('DB_ENGINE', 'django.contrib.gis.db.backends.postgis'), 'NAME': _u.path.lstrip('/'), 'USER': _u.username or '', 'PASSWORD': _u.password or '', 'HOST': _u.hostname or 'localhost', 'PORT': str(_u.port or 5432)}}
+else:
+    DATABASES={'default':{'ENGINE':os.getenv('DB_ENGINE','django.contrib.gis.db.backends.postgis'),'NAME':os.getenv('POSTGRES_DB','civifix'),'USER':os.getenv('POSTGRES_USER','civifix'),'PASSWORD':os.getenv('POSTGRES_PASSWORD','civifix'),'HOST':os.getenv('POSTGRES_HOST','localhost'),'PORT':os.getenv('POSTGRES_PORT','5432')}}
+LANGUAGE_CODE='en-us'; TIME_ZONE='UTC'; USE_I18N=True; USE_TZ=True; STATIC_URL='/static/'; STATIC_ROOT=BASE_DIR/'staticfiles'; MEDIA_URL='/media/'; MEDIA_ROOT=BASE_DIR/'media'; DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
+CORS_ALLOW_ALL_ORIGINS=True; CORS_ALLOW_CREDENTIALS=True
+CORS_ALLOWED_ORIGINS=[x for x in os.getenv('CORS_ALLOWED_ORIGINS','http://localhost:3000,https://civi-fix.vercel.app').split(',') if x]; REST_FRAMEWORK={'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework_simplejwt.authentication.JWTAuthentication'],'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAuthenticated'],'DEFAULT_SCHEMA_CLASS':'drf_spectacular.openapi.AutoSchema'}
 SPECTACULAR_SETTINGS={'TITLE':'CiviFix API','DESCRIPTION':'Smart City civic intelligence platform','VERSION':'1.0.0'}
 CELERY_BROKER_URL=os.getenv('REDIS_URL','redis://localhost:6379/0'); CELERY_RESULT_BACKEND=CELERY_BROKER_URL
 CELERY_BEAT_SCHEDULE={'check-sla-breaches':{'task':'apps.core.tasks.check_sla_breaches','schedule':300}}
