@@ -118,7 +118,7 @@ export function CiviFixDashboard() {
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [authError, setAuthError] = useState('')
-  const [credentials, setCredentials] = useState({ username: 'aayush_patidar', password: 'CiviFix@2026' })
+  const [credentials, setCredentials] = useState({ username: '', password: '' })
   const [regForm, setRegForm] = useState({
     username: '',
     email: '',
@@ -678,32 +678,26 @@ export function CiviFixDashboard() {
                 Sign in to Dashboard <ArrowUpRight size={16} />
               </button>
 
-              <div style={{ marginTop: 22, paddingTop: 16, borderTop: '1px solid #e7eeec' }}>
-                <span style={{ fontSize: 10, fontWeight: 700, color: '#8b9a9f', textTransform: 'uppercase' }}>
-                  One-Click Demo Personas:
-                </span>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginTop: 8 }}>
-                  {demoPersonas.map((p) => (
-                    <button
-                      key={p.username}
-                      type="button"
-                      onClick={() => switchPersona(p.username)}
-                      style={{
-                        padding: '7px 8px',
-                        borderRadius: 6,
-                        border: '1px solid #d9e4e1',
-                        background: '#f8faf9',
-                        fontSize: 10,
-                        fontWeight: 650,
-                        color: '#34474d',
-                        textAlign: 'left',
-                      }}
-                    >
-                      <strong style={{ display: 'block', color: '#176b67' }}>{p.label}</strong>
-                      <span style={{ fontSize: 9, color: '#88989d' }}>{p.name}</span>
-                    </button>
-                  ))}
-                </div>
+              <div style={{ marginTop: 22, paddingTop: 16, borderTop: '1px solid #e7eeec', textAlign: 'center' }}>
+                <p style={{ margin: 0, fontSize: 12, color: '#6d7f85' }}>
+                  Don&apos;t have an account yet?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setAuthMode('register')}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#176b67',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textDecoration: 'underline',
+                      padding: 0,
+                      fontSize: 12,
+                    }}
+                  >
+                    Create Citizen Account
+                  </button>
+                </p>
               </div>
             </form>
           ) : (
@@ -769,6 +763,28 @@ export function CiviFixDashboard() {
               <button className="primary-button" type="submit" style={{ width: '100%', justifyContent: 'center', marginTop: 16 }}>
                 Create Citizen Account <Plus size={16} />
               </button>
+
+              <div style={{ marginTop: 18, paddingTop: 14, borderTop: '1px solid #e7eeec', textAlign: 'center' }}>
+                <p style={{ margin: 0, fontSize: 12, color: '#6d7f85' }}>
+                  Already have an account?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setAuthMode('login')}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#176b67',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textDecoration: 'underline',
+                      padding: 0,
+                      fontSize: 12,
+                    }}
+                  >
+                    Sign In here
+                  </button>
+                </p>
+              </div>
             </form>
           )}
         </div>

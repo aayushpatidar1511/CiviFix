@@ -1,6 +1,12 @@
-# CiviFix — Report. Resolve. Improve.
+# CiviFix — Smart Municipal Civic Operations Platform
 
-CiviFix is a Smart City civic issue management platform connecting citizens, city administration, department officers and field workers.
+> Connecting citizens, city administration, department officers, and field workers with spatial intelligence and automated dispatch workflows.
+
+### 🌐 Live Deployments
+- **Live Web Application:** [https://civi-fix-aayush.vercel.app](https://civi-fix-aayush.vercel.app)
+- **Production REST API:** [https://civifix-api.onrender.com](https://civifix-api.onrender.com)
+- **Interactive Swagger Docs:** [https://civifix-api.onrender.com/api/docs/](https://civifix-api.onrender.com/api/docs/)
+
 
 ## Stack
 - Next.js / React / TypeScript
