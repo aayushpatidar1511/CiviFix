@@ -1,6 +1,14 @@
 {
   "name": "civifix",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Smart Municipal Civic Grievance & Infrastructure Platform",
+  "author": "Aayush Patidar <aayushmahendrapatidar@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://civi-fix-aayush.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aayushpatidar1511/CiviFix.git"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",

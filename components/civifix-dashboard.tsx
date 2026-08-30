@@ -788,6 +788,17 @@ export function CiviFixDashboard() {
             </form>
           )}
         </div>
+        <div style={{ marginTop: 14, textAlign: 'center', fontSize: 11, color: '#88989d' }}>
+          CiviFix Smart City Platform • Developed by{' '}
+          <a
+            href="https://github.com/aayushpatidar1511"
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: '#176b67', fontWeight: 600, textDecoration: 'none' }}
+          >
+            Aayush Patidar
+          </a>
+        </div>
       </main>
     )
   }
